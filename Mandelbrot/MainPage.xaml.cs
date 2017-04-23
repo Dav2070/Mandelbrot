@@ -47,27 +47,49 @@ namespace Mandelbrot
 
         private void SendNumberTextBox_Click(object sender, RoutedEventArgs e)
         {
-            (App.Current as App)._itemViewHolder.progressRingIsActive = true;
-
             double x = -0.5;
             Double.TryParse(XTextBox.Text, out x);
             double y = 0.5;
             Double.TryParse(YTextBox.Text, out y);
             OutputTextBlock.Text = "";
 
-            List<Complex> liste = iterieren(x, y, FileManager.ITERATIONEN);
-
-            foreach (Complex z in liste)
-            {
-                OutputTextBlock.Text += z.ToString() + "\n";
-            }
-
-            PeriodizitaetTextBlock.Text = GetPeriodizitaet(liste).ToString();
-
-            (App.Current as App)._itemViewHolder.progressRingIsActive = false;
+            IAsyncAction asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
+            (workItem) => {
+                Berechne(x, y);
+            });
         }
 
-        private int GetPeriodizitaet(List<Complex> complexList)
+        private async void Berechne(double x, double y)
+        {
+            await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+             {
+                 (App.Current as App)._itemViewHolder.progressRingIsActive = true;
+             });
+
+            IAsyncAction asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
+            async (workItem) => {
+
+                await iterieren(x, y, FileManager.ITERATIONEN);
+
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    foreach (Complex z in (App.Current as App)._itemViewHolder.complexList)
+                    {
+                        OutputTextBlock.Text += z.ToString() + "\n";
+                    }
+                });
+
+                await GetPeriodizitaet((App.Current as App)._itemViewHolder.complexList);
+
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    PeriodizitaetTextBlock.Text = (App.Current as App)._itemViewHolder.periodizitaet.ToString();
+                    (App.Current as App)._itemViewHolder.progressRingIsActive = false;
+                });
+            });
+        }
+
+        private async Task<int> GetPeriodizitaet(List<Complex> complexList)
         {
             int periodizitaet = 1;
             
@@ -75,7 +97,10 @@ namespace Mandelbrot
             {
                 if(IsKonvergent(createListe(complexList, periodizitaet)))
                 {
-                    (App.Current as App)._itemViewHolder.periodizitaet = periodizitaet;
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        (App.Current as App)._itemViewHolder.periodizitaet = periodizitaet;
+                    });
                     return periodizitaet;
                 }
                 else
@@ -83,7 +108,10 @@ namespace Mandelbrot
                     periodizitaet++;
                 }
             }
-            (App.Current as App)._itemViewHolder.periodizitaet = -1;
+            await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                (App.Current as App)._itemViewHolder.periodizitaet = -1;
+            });
             return -1;
         }
 
@@ -134,7 +162,7 @@ namespace Mandelbrot
                     realDifferenz < FileManager.MAX_DIFFERENCE && realDifferenz > -FileManager.MAX_DIFFERENCE);
         }
 
-        private List<Complex> iterieren(double x, double y, int n)
+        private async Task<List<Complex>> iterieren(double x, double y, int n)
         {
             Complex c = new Complex(x, y);     // Startwert
 
@@ -147,7 +175,11 @@ namespace Mandelbrot
                 complexNumbers.Add(z);
             }
 
-            (App.Current as App)._itemViewHolder.complexList = complexNumbers;
+            await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                (App.Current as App)._itemViewHolder.complexList = complexNumbers;
+            });
+            
             return complexNumbers;
         }
     }
