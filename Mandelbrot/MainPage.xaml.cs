@@ -40,9 +40,20 @@ namespace Mandelbrot
             setDataContext();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            ShowResults();
+        }
+
         private void setDataContext()
         {
             ContentRoot.DataContext = (App.Current as App)._itemViewHolder;
+        }
+
+        private void SeeMapButton_Click(object sender, RoutedEventArgs e)
+        {
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            (App.Current as App)._itemViewHolder.page = typeof(MapPage);
         }
 
         private void SendNumberTextBox_Click(object sender, RoutedEventArgs e)
@@ -52,6 +63,9 @@ namespace Mandelbrot
             double y = 0.5;
             Double.TryParse(YTextBox.Text, out y);
             OutputTextBlock.Text = "";
+
+            (App.Current as App)._itemViewHolder.x = x;
+            (App.Current as App)._itemViewHolder.y = y;
 
             IAsyncAction asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
             (workItem) => {
@@ -73,10 +87,7 @@ namespace Mandelbrot
 
                 await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    foreach (Complex z in (App.Current as App)._itemViewHolder.complexList)
-                    {
-                        OutputTextBlock.Text += z.ToString() + "\n";
-                    }
+                    ShowResults();
                 });
 
                 await GetPeriodizitaet((App.Current as App)._itemViewHolder.complexList);
@@ -87,6 +98,26 @@ namespace Mandelbrot
                     (App.Current as App)._itemViewHolder.progressRingIsActive = false;
                 });
             });
+        }
+
+        private void ShowResults()
+        {
+            double x = (App.Current as App)._itemViewHolder.x;
+            double y = (App.Current as App)._itemViewHolder.y;
+
+            if(x != 0 && y != 0)
+            {
+                XTextBox.Text = x.ToString();
+                YTextBox.Text = y.ToString();
+            }
+
+            if ((App.Current as App)._itemViewHolder.complexList.Count > 3)
+            {
+                foreach (Complex z in (App.Current as App)._itemViewHolder.complexList)
+                {
+                    OutputTextBlock.Text += z.ToString() + "\n";
+                }
+            }
         }
 
         private async Task<int> GetPeriodizitaet(List<Complex> complexList)

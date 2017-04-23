@@ -28,7 +28,10 @@ namespace Mandelbrot
         {
             progressRingIsActive = false,
             complexList = new List<Complex>(),
-            periodizitaet = -1
+            periodizitaet = -1,
+            page = typeof(MainPage),
+            x = 0,
+            y = 0
         };
 
         /// <summary>
@@ -75,7 +78,7 @@ namespace Mandelbrot
                     // Wenn der Navigationsstapel nicht wiederhergestellt wird, zur ersten Seite navigieren
                     // und die neue Seite konfigurieren, indem die erforderlichen Informationen als Navigationsparameter
                     // übergeben werden
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(RootPage), e.Arguments);
                 }
                 // Sicherstellen, dass das aktuelle Fenster aktiv ist
                 Window.Current.Activate();

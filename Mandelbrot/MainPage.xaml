@@ -24,6 +24,8 @@
                         HorizontalAlignment="Center" VerticalAlignment="Center"
                         Width="25" Height="25" Margin="10,0,0,0"
                         IsActive="{Binding progressRingIsActive, Mode=TwoWay}" />
+                    <Button Name="SeeMapButton" Content="Karte"
+                            Margin="20,0,0,0" Click="SeeMapButton_Click" />
                 </StackPanel>
                 <TextBlock Name="PeriodizitaetTextBlock" Text="{Binding periodizitaet}" />
                 <TextBlock Name="OutputTextBlock" />

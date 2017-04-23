@@ -14,6 +14,9 @@ namespace Mandelbrot.Models
         private bool _progressRingIsActive;
         private List<Complex> _complexList;
         private int _periodizitaet;
+        private Type _page;
+        private double _x;
+        private double _y;
 
 
         public bool progressRingIsActive
@@ -46,6 +49,39 @@ namespace Mandelbrot.Models
             {
                 _periodizitaet = value;
                 NotifyPropertyChanged("periodizitaet");
+            }
+        }
+
+        public Type page
+        {
+            get { return _page; }
+
+            set
+            {
+                _page = value;
+                NotifyPropertyChanged("page");
+            }
+        }
+
+        public double x
+        {
+            get { return _x; }
+
+            set
+            {
+                _x = value;
+                NotifyPropertyChanged("x");
+            }
+        }
+
+        public double y
+        {
+            get { return _y; }
+
+            set
+            {
+                _y = value;
+                NotifyPropertyChanged("y");
             }
         }
 
