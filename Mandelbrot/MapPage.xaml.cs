@@ -32,7 +32,6 @@ namespace Mandelbrot
         public MapPage()
         {
             this.InitializeComponent();
-            CreateMap();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -40,9 +39,17 @@ namespace Mandelbrot
 
         }
 
-        private void CreateMap()
+        private void ZeichnenButton_Click(object sender, RoutedEventArgs e)
         {
-            _root = FileManager.GetVisual(ContentRoot);
+            int faktor = int.Parse(FaktorTextBox.Text);
+            double genauigkeit = double.Parse(GenauigkeitTextBox.Text);
+
+            CreateMap(faktor, genauigkeit);
+        }
+
+        private void CreateMap(int faktor, double genauigkeit)
+        {
+            _root = FileManager.GetVisual(MapStackPanel);
 
             // Get the current compositor
             Compositor compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
@@ -54,31 +61,41 @@ namespace Mandelbrot
             CompositionColorBrush cyan = compositor.CreateColorBrush(Colors.Cyan);
             CompositionColorBrush aqua = compositor.CreateColorBrush(Colors.Aqua);
 
-            int factor = 10;
-            double pixelOverall = (Window.Current.Bounds.Width * Window.Current.Bounds.Height) / factor;
-            double pixelWidth = Window.Current.Bounds.Width/factor;
-            double pixelHeight = Window.Current.Bounds.Height/factor;
-            Debug.WriteLine("Pixel Width: " + pixelWidth);
+            int berechnungen = 0;
 
+            double width = Window.Current.Bounds.Width;
+            double height = Window.Current.Bounds.Height;
+            Debug.WriteLine("Options Height: " + OptionsStackPanel.Height);
+
+            double pixelOverall = (width * height) / faktor;
+            double pixelWidth = width/faktor;
+            double pixelHeight = height/faktor;
+            Debug.WriteLine("PixelHeight: " + pixelHeight);
 
             // Ursprung = (x/1,5|y/2)
             // Oben links Ecke = (x-ursprungX|y-ursprungY)
             // Oben links Ecke + x1 = (x-ursprungX|y-ursprungY)
-            double ursprungX = pixelWidth / 1.5;
-            double ursprungY = pixelHeight / 2;
-            Complex ursprung = new Complex(pixelWidth / 1.5, pixelHeight / 2);
+            double ursprungX = (pixelWidth / 1.5);
+            double ursprungY = (pixelHeight / 2);
+            Complex ursprung = new Complex(ursprungX, ursprungY);
             Debug.WriteLine("Ursprung X: " + ursprungX + " Ursprung Y: " + ursprungY);
 
-            for (int y = 0; y < pixelHeight; y++)
+            for (double y = 0; y < pixelHeight; y = y+genauigkeit)
             {
-                for (int x = 0; x < pixelWidth; x++)
+                for (double x = 0; x < pixelWidth; x = x + genauigkeit)
                 {
                     SpriteVisual rect = compositor.CreateSpriteVisual();
                     //Debug.WriteLine(Math.Floor(Decimal.Ceiling(x / 10) / 2));
 
-                    Complex complex = new Complex(x - ursprung.Real, y - ursprung.Imaginary);
-                    int periodiziteat = FileManager.Berechne(complex.Real, complex.Imaginary);
-                    Debug.WriteLine("Periodizität von " + complex + ": " + periodiziteat);
+                    int periodiziteat = -1;
+                    if (x - ursprung.Real < 5 && x - ursprung.Real > -5
+                        && y - ursprung.Imaginary < 5 && y - ursprung.Imaginary > -5)
+                    {
+                        Complex complex = new Complex(x - ursprung.Real, y - ursprung.Imaginary);
+                        periodiziteat = FileManager.Berechne(complex.Real, complex.Imaginary);
+                        Debug.WriteLine("Periodizität von " + complex + ": " + periodiziteat);
+                        berechnungen++;
+                    }
 
                     switch (periodiziteat)
                     {
@@ -90,39 +107,14 @@ namespace Mandelbrot
                             break;
                     }
 
-                    /*
-                    switch (Math.Floor(Decimal.Ceiling(x / 10)/2))
-                    {
-                        case 0:
-                            rect.Brush = orange;
-                            break;
-                        case 1:
-                            rect.Brush = red;
-                            break;
-                        case 2:
-                            rect.Brush = blue;
-                            break;
-                        case 3:
-                            rect.Brush = darkBlue;
-                            break;
-                        case 4:
-                            rect.Brush = cyan;
-                            break;
-                        case 5:
-                            rect.Brush = aqua;
-                            break;
-                        default:
-                            rect.Brush = red;
-                            break;
-                    }
-                    */
-
-                    rect.Size = new Vector2(factor, factor);
-                    rect.Offset = new Vector3(x*factor, y*factor, 0);
+                    rect.Size = new Vector2(faktor, faktor);
+                    rect.Offset = new Vector3(float.Parse((x * faktor).ToString()), float.Parse((y * faktor).ToString()), 0);
                     _root.Children.InsertAtTop(rect);
                 }
                 Debug.WriteLine("Reihe " + y + " von " + pixelHeight);
+                ProgressTextBlock.Text = "Reihe " + y + " von " + pixelHeight;
             }
+            Debug.WriteLine("Berechnungen: " + berechnungen);
         }
     }
 }

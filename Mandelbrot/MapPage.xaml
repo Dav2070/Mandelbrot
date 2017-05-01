@@ -9,6 +9,18 @@
     Loaded="Page_Loaded">
 
     <Grid Name="ContentRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         
+        <StackPanel Name="OptionsStackPanel" Grid.Row="0" Orientation="Horizontal">
+            <TextBox Name="GenauigkeitTextBox" Text="0,1" PlaceholderText="Genauigkeit" InputScope="AlphanumericFullWidth" />
+            <TextBox Name="FaktorTextBox" Text="10" PlaceholderText="Faktor" InputScope="AlphanumericFullWidth" />
+            <Button Name="ZeichnenButton" Content="Zeichnen" Click="ZeichnenButton_Click" />
+            <TextBlock Name="ProgressTextBlock" />
+        </StackPanel>
+
+        <StackPanel Name="MapStackPanel" Grid.Row="1" />
     </Grid>
 </Page>
