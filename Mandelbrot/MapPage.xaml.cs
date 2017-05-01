@@ -47,17 +47,76 @@ namespace Mandelbrot
             // Get the current compositor
             Compositor compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
 
-            int factor = 8;
+            CompositionColorBrush orange = compositor.CreateColorBrush(Colors.Orange);
+            CompositionColorBrush red = compositor.CreateColorBrush(Colors.Red);
+            CompositionColorBrush blue = compositor.CreateColorBrush(Colors.Blue);
+            CompositionColorBrush darkBlue = compositor.CreateColorBrush(Colors.DarkBlue);
+            CompositionColorBrush cyan = compositor.CreateColorBrush(Colors.Cyan);
+            CompositionColorBrush aqua = compositor.CreateColorBrush(Colors.Aqua);
+
+            int factor = 10;
             double pixelOverall = (Window.Current.Bounds.Width * Window.Current.Bounds.Height) / factor;
             double pixelWidth = Window.Current.Bounds.Width/factor;
             double pixelHeight = Window.Current.Bounds.Height/factor;
+            Debug.WriteLine("Pixel Width: " + pixelWidth);
+
+
+            // Ursprung = (x/1,5|y/2)
+            // Oben links Ecke = (x-ursprungX|y-ursprungY)
+            // Oben links Ecke + x1 = (x-ursprungX|y-ursprungY)
+            double ursprungX = pixelWidth / 1.5;
+            double ursprungY = pixelHeight / 2;
+            Complex ursprung = new Complex(pixelWidth / 1.5, pixelHeight / 2);
+            Debug.WriteLine("Ursprung X: " + ursprungX + " Ursprung Y: " + ursprungY);
 
             for (int y = 0; y < pixelHeight; y++)
             {
                 for (int x = 0; x < pixelWidth; x++)
                 {
                     SpriteVisual rect = compositor.CreateSpriteVisual();
-                    rect.Brush = compositor.CreateColorBrush(Colors.Black);
+                    //Debug.WriteLine(Math.Floor(Decimal.Ceiling(x / 10) / 2));
+
+                    Complex complex = new Complex(x - ursprung.Real, y - ursprung.Imaginary);
+                    int periodiziteat = FileManager.Berechne(complex.Real, complex.Imaginary);
+                    Debug.WriteLine("Periodizität von " + complex + ": " + periodiziteat);
+
+                    switch (periodiziteat)
+                    {
+                        case -1:
+                            rect.Brush = red;
+                            break;
+                        default:
+                            rect.Brush = blue;
+                            break;
+                    }
+
+                    /*
+                    switch (Math.Floor(Decimal.Ceiling(x / 10)/2))
+                    {
+                        case 0:
+                            rect.Brush = orange;
+                            break;
+                        case 1:
+                            rect.Brush = red;
+                            break;
+                        case 2:
+                            rect.Brush = blue;
+                            break;
+                        case 3:
+                            rect.Brush = darkBlue;
+                            break;
+                        case 4:
+                            rect.Brush = cyan;
+                            break;
+                        case 5:
+                            rect.Brush = aqua;
+                            break;
+                        default:
+                            rect.Brush = red;
+                            break;
+                    }
+                    */
+
                     rect.Size = new Vector2(factor, factor);
                     rect.Offset = new Vector3(x*factor, y*factor, 0);
                     _root.Children.InsertAtTop(rect);
