@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -43,7 +44,15 @@ namespace Mandelbrot
         private void RootPage_BackRequested(object sender, BackRequestedEventArgs e)
         {
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-            (App.Current as App)._itemViewHolder.page = typeof(MainPage);
+            if((App.Current as App)._itemViewHolder.page == typeof(MainPage))
+            {
+                CoreApplication.Exit();
+            }
+            else
+            {
+                (App.Current as App)._itemViewHolder.page = typeof(MainPage);
+            }
+            e.Handled = true;
         }
     }
 }
