@@ -14,7 +14,7 @@ namespace Mandelbrot
     {
         public const double MAX_DIFFERENCE = 0.1;
         public const int MAX_PERIODIZITAET = 500;
-        public const int ITERATIONEN = 10000;
+        public const int ITERATIONEN = 1000;
 
         public static ContainerVisual GetVisual(this UIElement element)
         {

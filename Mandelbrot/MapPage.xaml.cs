@@ -102,6 +102,21 @@ namespace Mandelbrot
                         case -1:
                             rect.Brush = red;
                             break;
+                        case 1:
+                            rect.Brush = orange;
+                            break;
+                        case 2:
+                            rect.Brush = aqua;
+                            break;
+                        case 3:
+                            rect.Brush = cyan;
+                            break;
+                        case 4:
+                            rect.Brush = blue;
+                            break;
+                        case 5:
+                            rect.Brush = darkBlue;
+                            break;
                         default:
                             rect.Brush = blue;
                             break;
