@@ -14,7 +14,7 @@ namespace Mandelbrot
     {
         public const double MAX_DIFFERENCE = 0.1;
         public const int MAX_PERIODIZITAET = 500;
-        public const int ITERATIONEN = 1000;
+        public const int ITERATIONEN = 10000;
 
         public static ContainerVisual GetVisual(this UIElement element)
         {
@@ -24,11 +24,12 @@ namespace Mandelbrot
             return root;
         }
 
-        public static int Berechne(double x, double y)
+        public static Tuple<int, List<Complex>> Berechne(double x, double y)
         {
             List<Complex> liste = iterieren(x, y, ITERATIONEN);
+            int periodizitaet = GetPeriodizitaet(liste);
 
-            return GetPeriodizitaet(liste);
+            return Tuple.Create(periodizitaet, liste);
         }
 
         private static List<Complex> iterieren(double x, double y, int n)

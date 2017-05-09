@@ -54,12 +54,14 @@ namespace Mandelbrot
             // Get the current compositor
             Compositor compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
 
+            CompositionColorBrush white = compositor.CreateColorBrush(Colors.White);
             CompositionColorBrush orange = compositor.CreateColorBrush(Colors.Orange);
             CompositionColorBrush red = compositor.CreateColorBrush(Colors.Red);
             CompositionColorBrush blue = compositor.CreateColorBrush(Colors.Blue);
             CompositionColorBrush darkBlue = compositor.CreateColorBrush(Colors.DarkBlue);
             CompositionColorBrush cyan = compositor.CreateColorBrush(Colors.Cyan);
             CompositionColorBrush aqua = compositor.CreateColorBrush(Colors.Aqua);
+            CompositionColorBrush black = compositor.CreateColorBrush(Colors.Black);
 
             int berechnungen = 0;
 
@@ -92,7 +94,8 @@ namespace Mandelbrot
                         && y - ursprung.Imaginary < 5 && y - ursprung.Imaginary > -5)
                     {
                         Complex complex = new Complex(x - ursprung.Real, y - ursprung.Imaginary);
-                        periodiziteat = FileManager.Berechne(complex.Real, complex.Imaginary);
+                        Tuple<int, List<Complex>> tuple = FileManager.Berechne(complex.Real, complex.Imaginary);
+                        periodiziteat = tuple.Item1;
                         Debug.WriteLine("Periodizität von " + complex + ": " + periodiziteat);
                         berechnungen++;
                     }
@@ -100,13 +103,13 @@ namespace Mandelbrot
                     switch (periodiziteat)
                     {
                         case -1:
-                            rect.Brush = red;
+                            rect.Brush = white;
                             break;
                         case 1:
                             rect.Brush = orange;
                             break;
                         case 2:
-                            rect.Brush = aqua;
+                            rect.Brush = red;
                             break;
                         case 3:
                             rect.Brush = cyan;
@@ -117,8 +120,11 @@ namespace Mandelbrot
                         case 5:
                             rect.Brush = darkBlue;
                             break;
+                        case 6:
+                            rect.Brush = black;
+                            break;
                         default:
-                            rect.Brush = blue;
+                            rect.Brush = white;
                             break;
                     }
 

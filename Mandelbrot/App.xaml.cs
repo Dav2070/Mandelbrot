@@ -26,12 +26,7 @@ namespace Mandelbrot
     {
         public ItemViewHolder _itemViewHolder = new ItemViewHolder
         {
-            progressRingIsActive = false,
-            complexList = new List<Complex>(),
-            periodizitaet = -1,
-            page = typeof(MainPage),
-            x = 0,
-            y = 0
+            page = typeof(MainPage)
         };
 
         /// <summary>
