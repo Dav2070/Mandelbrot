@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -26,31 +27,51 @@ namespace Mandelbrot
 
         public static Tuple<int, List<Complex>> Berechne(double x, double y)
         {
-            List<Complex> liste = iterieren(x, y, ITERATIONEN);
-            int periodizitaet = GetPeriodizitaet(liste);
+            int periodizitaet = -1;
 
-            return Tuple.Create(periodizitaet, liste);
+            Tuple<List<Complex>, bool> iterationenTuple = iterieren(x, y, ITERATIONEN);
+            if (!iterationenTuple.Item2)
+            {
+                periodizitaet = GetPeriodizitaet(iterationenTuple.Item1);
+            }
+
+            return Tuple.Create(periodizitaet, iterationenTuple.Item1);
         }
 
-        private static List<Complex> iterieren(double x, double y, int n)
+        private static Tuple<List<Complex>, bool> iterieren(double x, double y, int n)
         {
             Complex c = new Complex(x, y);     // Startwert
 
             List<Complex> complexNumbers = new List<Complex>();
             complexNumbers.Add(new Complex(0, 0));
+            bool isDivergent = false;
 
             for (int i = 0; i < n; i++)
             {
                 Complex z = complexNumbers.ElementAt(i) * complexNumbers.ElementAt(i) + c;
+                if((double.IsNaN(z.Imaginary) || double.IsNaN(z.Real)) ||
+                    (z.Imaginary > 5 || z.Imaginary < -5) ||
+                    (z.Real > 5 || z.Real < -5))
+                {
+                    isDivergent = true;
+                    break;
+                }
+
                 complexNumbers.Add(z);
             }
 
-            return complexNumbers;
+            return Tuple.Create(complexNumbers, isDivergent);
         }
 
         private static int GetPeriodizitaet(List<Complex> complexList)
         {
             int periodizitaet = 1;
+
+            Debug.WriteLine(complexList.Count);
+            if(complexList.Count < 15)
+            {
+                return -1;
+            }
 
             for (int i = 0; i < FileManager.MAX_PERIODIZITAET; i++)
             {
@@ -69,9 +90,12 @@ namespace Mandelbrot
         private static bool IsKonvergent(List<Complex> complexList)
         {
             // Remove first 10 entries
-            for (int i = 0; i < 10; i++)
+            if(complexList.Count > 10)
             {
-                complexList.RemoveAt(0);
+                for (int i = 0; i < 10; i++)
+                {
+                    complexList.RemoveAt(0);
+                }
             }
             
             for (int i = complexList.Count; i > complexList.Count - 10; i--)
@@ -99,6 +123,11 @@ namespace Mandelbrot
 
         private static List<Complex> createListe(List<Complex> liste, int periodizitaet)
         {
+            if (periodizitaet == 1)
+            {   // Gib alte Liste zurück, da diese identisch mit der neuen Liste ist
+                return liste;
+            }
+            
             List<Complex> newList = new List<Complex>();
             for (int i = 0; i < liste.Count; i++)
             {

@@ -89,18 +89,18 @@ namespace Mandelbrot
                     SpriteVisual rect = compositor.CreateSpriteVisual();
                     //Debug.WriteLine(Math.Floor(Decimal.Ceiling(x / 10) / 2));
 
-                    int periodiziteat = -1;
+                    int periodizitaet = -1;
                     if (x - ursprung.Real < 5 && x - ursprung.Real > -5
                         && y - ursprung.Imaginary < 5 && y - ursprung.Imaginary > -5)
                     {
                         Complex complex = new Complex(x - ursprung.Real, y - ursprung.Imaginary);
                         Tuple<int, List<Complex>> tuple = FileManager.Berechne(complex.Real, complex.Imaginary);
-                        periodiziteat = tuple.Item1;
-                        Debug.WriteLine("Periodizität von " + complex + ": " + periodiziteat);
+                        periodizitaet = tuple.Item1;
+                        Debug.WriteLine("Periodizität von " + complex + ": " + periodizitaet);
                         berechnungen++;
                     }
 
-                    switch (periodiziteat)
+                    switch (periodizitaet)
                     {
                         case -1:
                             rect.Brush = white;
