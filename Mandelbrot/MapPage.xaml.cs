@@ -96,7 +96,6 @@ namespace Mandelbrot
                         Complex complex = new Complex(x - ursprung.Real, y - ursprung.Imaginary);
                         Tuple<int, List<Complex>> tuple = FileManager.Berechne(complex.Real, complex.Imaginary);
                         periodizitaet = tuple.Item1;
-                        Debug.WriteLine("Periodizität von " + complex + ": " + periodizitaet);
                         berechnungen++;
                     }
 
@@ -132,8 +131,7 @@ namespace Mandelbrot
                     rect.Offset = new Vector3(float.Parse((x * faktor).ToString()), float.Parse((y * faktor).ToString()), 0);
                     _root.Children.InsertAtTop(rect);
                 }
-                Debug.WriteLine("Reihe " + y + " von " + pixelHeight);
-                ProgressTextBlock.Text = "Reihe " + y + " von " + pixelHeight;
+                Debug.WriteLine("Fortschritt: " + 100 / pixelHeight * y);
             }
             Debug.WriteLine("Berechnungen: " + berechnungen);
         }

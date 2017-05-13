@@ -67,7 +67,6 @@ namespace Mandelbrot
         {
             int periodizitaet = 1;
 
-            Debug.WriteLine(complexList.Count);
             if(complexList.Count < 15)
             {
                 return -1;
