@@ -5,10 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.Composition;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -28,6 +30,7 @@ namespace Mandelbrot
     public sealed partial class MapPage : Page
     {
         private ContainerVisual _root;
+        IAsyncAction asyncAction;
 
         public MapPage()
         {
@@ -45,6 +48,11 @@ namespace Mandelbrot
             double genauigkeit = double.Parse(GenauigkeitTextBox.Text);
 
             CreateMap(faktor, genauigkeit);
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            asyncAction.Cancel();
         }
 
         private void CreateMap(int faktor, double genauigkeit)
@@ -67,7 +75,6 @@ namespace Mandelbrot
 
             double width = Window.Current.Bounds.Width;
             double height = Window.Current.Bounds.Height;
-            Debug.WriteLine("Options Height: " + OptionsStackPanel.Height);
 
             double pixelOverall = (width * height) / faktor;
             double pixelWidth = width/faktor;
@@ -82,58 +89,113 @@ namespace Mandelbrot
             Complex ursprung = new Complex(ursprungX, ursprungY);
             Debug.WriteLine("Ursprung X: " + ursprungX + " Ursprung Y: " + ursprungY);
 
-            for (double y = 0; y < pixelHeight; y = y+genauigkeit)
-            {
-                for (double x = 0; x < pixelWidth; x = x + genauigkeit)
+            double fortschritt = 0;
+            //CancelButton.Visibility = Visibility.Visible;
+
+            asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
+                async (workItem) =>
                 {
-                    SpriteVisual rect = compositor.CreateSpriteVisual();
-                    //Debug.WriteLine(Math.Floor(Decimal.Ceiling(x / 10) / 2));
-
-                    int periodizitaet = -1;
-                    if (x - ursprung.Real < 5 && x - ursprung.Real > -5
-                        && y - ursprung.Imaginary < 5 && y - ursprung.Imaginary > -5)
+                    for (double y = 0; y < pixelHeight; y = y + genauigkeit)
                     {
-                        Complex complex = new Complex(x - ursprung.Real, y - ursprung.Imaginary);
-                        Tuple<int, List<Complex>> tuple = FileManager.Berechne(complex.Real, complex.Imaginary);
-                        periodizitaet = tuple.Item1;
-                        berechnungen++;
+                        for (double x = 0; x < pixelWidth; x = x + genauigkeit)
+                        {
+                            SpriteVisual rect = compositor.CreateSpriteVisual();
+                            //Debug.WriteLine(Math.Floor(Decimal.Ceiling(x / 10) / 2));
+
+                            int periodizitaet = -1;
+                            if (x - ursprung.Real < 5 && x - ursprung.Real > -5
+                                && y - ursprung.Imaginary < 5 && y - ursprung.Imaginary > -5)
+                            {
+                                Complex complex = new Complex(x - ursprung.Real, y - ursprung.Imaginary);
+                                Tuple<int, List<Complex>> tuple = FileManager.Berechne(complex.Real, complex.Imaginary);
+                                periodizitaet = tuple.Item1;
+                                berechnungen++;
+                                tuple = null;
+
+                                GC.Collect();
+                                GC.WaitForPendingFinalizers();
+                            }
+                            
+                            switch (periodizitaet)
+                            {
+                                case -1:
+                                    rect.Brush = white;
+                                    break;
+                                case 1:
+                                    rect.Brush = orange;
+                                    break;
+                                case 2:
+                                    rect.Brush = red;
+                                    break;
+                                case 3:
+                                    rect.Brush = cyan;
+                                    break;
+                                case 4:
+                                    rect.Brush = blue;
+                                    break;
+                                case 5:
+                                    rect.Brush = darkBlue;
+                                    break;
+                                case 6:
+                                    rect.Brush = black;
+                                    break;
+                                default:
+                                    rect.Brush = white;
+                                    break;
+                            }
+                            
+                            //rect.Brush = compositor.CreateColorBrush(Color.FromArgb(255, byte.Parse(((berechnungen/periodizitaet)/7).ToString()), byte.Parse(((berechnungen/periodizitaet) / 7).ToString()), byte.Parse((periodizitaet / 4).ToString()))); //(CompositionBrush) Color.FromArgb(255, (byte)periodizitaet, byte.Parse((periodizitaet / 2).ToString()), byte.Parse((periodizitaet / 5).ToString()));
+                            rect.Size = new Vector2(faktor, faktor);
+                            rect.Offset = new Vector3(float.Parse((x * faktor).ToString()), float.Parse((y * faktor).ToString()), 0);
+                            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                                CoreDispatcherPriority.High,
+                                new DispatchedHandler(() =>
+                                {
+                                    _root.Children.InsertAtTop(rect);
+                                }));
+                            rect = null;
+                        }
+
+                        fortschritt = Math.Round(100 / pixelHeight * y, 1);
+                        Debug.WriteLine("Fortschritt: " + fortschritt);
+                        
+                        await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                                CoreDispatcherPriority.High,
+                                new DispatchedHandler(() =>
+                                {
+                                    ProgressTextBlock.Text = fortschritt.ToString();
+                                    ProgressBar.Value = fortschritt;
+                                }));
                     }
 
-                    switch (periodizitaet)
-                    {
-                        case -1:
-                            rect.Brush = white;
-                            break;
-                        case 1:
-                            rect.Brush = orange;
-                            break;
-                        case 2:
-                            rect.Brush = red;
-                            break;
-                        case 3:
-                            rect.Brush = cyan;
-                            break;
-                        case 4:
-                            rect.Brush = blue;
-                            break;
-                        case 5:
-                            rect.Brush = darkBlue;
-                            break;
-                        case 6:
-                            rect.Brush = black;
-                            break;
-                        default:
-                            rect.Brush = white;
-                            break;
-                    }
+                    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                        CoreDispatcherPriority.High,
+                        new DispatchedHandler(() =>
+                        {
+                            // Reset UI
+                            //CancelButton.Visibility = Visibility.Collapsed;
+                            ProgressBar.Value = 0;
+                            ProgressTextBlock.Text = berechnungen.ToString() + " Berechnungen";
+                            Debug.WriteLine("Berechnungen: " + berechnungen);
+                        }));
+                });
 
-                    rect.Size = new Vector2(faktor, faktor);
-                    rect.Offset = new Vector3(float.Parse((x * faktor).ToString()), float.Parse((y * faktor).ToString()), 0);
-                    _root.Children.InsertAtTop(rect);
-                }
-                Debug.WriteLine("Fortschritt: " + 100 / pixelHeight * y);
-            }
-            Debug.WriteLine("Berechnungen: " + berechnungen);
+            asyncAction.Completed = new AsyncActionCompletedHandler(
+                async (IAsyncAction asyncInfo, AsyncStatus asyncStatus) =>
+                {
+                    Debug.WriteLine("Beendet");
+                    // Update the UI thread with the CoreDispatcher.
+                    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                        CoreDispatcherPriority.High,
+                        new DispatchedHandler(() =>
+                        {
+                            if (asyncStatus == AsyncStatus.Canceled)
+                            {
+                                //CancelButton.Visibility = Visibility.Collapsed;
+                                ProgressBar.Value = 0;
+                            }
+                        }));
+                });
         }
     }
 }

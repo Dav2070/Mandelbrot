@@ -11,16 +11,47 @@
     <Grid Name="ContentRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
-        <StackPanel Name="OptionsStackPanel" Grid.Row="0" Orientation="Horizontal">
-            <TextBox Name="GenauigkeitTextBox" Text="0,1" PlaceholderText="Genauigkeit" InputScope="AlphanumericFullWidth" />
-            <TextBox Name="FaktorTextBox" Text="200" PlaceholderText="Faktor" InputScope="AlphanumericFullWidth" />
-            <Button Name="ZeichnenButton" Content="Zeichnen" Click="ZeichnenButton_Click" />
-            <TextBlock Name="ProgressTextBlock" />
-        </StackPanel>
 
-        <StackPanel Name="MapStackPanel" Grid.Row="1" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Genauigkeit" Grid.Column="0" Grid.Row="0" Margin="0,0,10,0" />
+            <TextBlock Text="Faktor" Grid.Column="1" Grid.Row="0" />
+            <TextBlock Text="Iterationen" Grid.Column="2" Grid.Row="0" />
+
+            <TextBox Name="GenauigkeitTextBox" Grid.Column="0" Grid.Row="1" 
+                     Text="0,1" PlaceholderText="Genauigkeit" InputScope="AlphanumericFullWidth"
+                     Margin="0,0,10,0" />
+            <TextBox Name="FaktorTextBox" Grid.Column="1" Grid.Row="1" 
+                     Text="200" PlaceholderText="Faktor" InputScope="AlphanumericFullWidth"
+                     Margin="0,0,10,0" />
+            <TextBox Name="IterationenTextBox" Grid.Column="2" Grid.Row="1"
+                     Text="10000" />
+
+            <StackPanel Name="OptionsStackPanel" Grid.Row="1" Grid.Column="3" Orientation="Horizontal">
+                <Button Name="ZeichnenButton" Content="Zeichnen" Click="ZeichnenButton_Click" />
+                <TextBlock Name="ProgressTextBlock" 
+                       Margin="15,0,0,0" VerticalAlignment="Center" />
+                <!--    <Button Name="CancelButton" Content="Abbrechen" 
+                    Margin="50,0,0,0" Visibility="Collapsed" Click="CancelButton_Click" />  -->
+            </StackPanel>
+        </Grid>
+        
+        <ProgressBar Name="ProgressBar" Grid.Row="1" Value="0" />
+
+        <StackPanel Name="MapStackPanel" Grid.Row="2" />
     </Grid>
 </Page>

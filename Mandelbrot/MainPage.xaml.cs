@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
 using Windows.UI.Core;
+using Windows.ApplicationModel.Core;
 
 // Die Elementvorlage "Leere Seite" wird unter https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x407 dokumentiert.
 
@@ -65,21 +66,33 @@ namespace Mandelbrot
             OutputTextBlock.Text = "";
 
             IAsyncAction asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
-            async (workItem) =>
-            {
-                Tuple<int, List<Complex>> tuple = FileManager.Berechne(x, y);
-                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                async (workItem) =>
                 {
-                    PeriodizitaetTextBlock.Text = tuple.Item1.ToString();
-                    if (tuple.Item2.Count > 3)
-                    {
-                        foreach (Complex z in tuple.Item2)
-                        {
-                            OutputTextBlock.Text += z.ToString() + "\n";
-                        }
-                    }
+                    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                                CoreDispatcherPriority.High,
+                                new DispatchedHandler(() =>
+                                {
+                                    ProgressRing.IsActive = true;
+                                }));
+
+                    Tuple<int, List<Complex>> tuple = FileManager.Berechne(x, y);
+
+                    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                                CoreDispatcherPriority.High,
+                                new DispatchedHandler(() =>
+                                {
+                                    PeriodizitaetTextBlock.Text = tuple.Item1.ToString();
+                                    if (tuple.Item2.Count > 3)
+                                    {
+                                        foreach (Complex z in tuple.Item2)
+                                        {
+                                            OutputTextBlock.Text += z.ToString() + "\n";
+                                        }
+                                    }
+
+                                    ProgressRing.IsActive = false;
+                                }));
                 });
-            });
         }
     }
 }
