@@ -25,11 +25,11 @@ namespace Mandelbrot
             return root;
         }
 
-        public static Tuple<int, List<Complex>> Berechne(double x, double y)
+        public static Tuple<int, List<Complex>> Berechne(double x, double y, int iterationen)
         {
             int periodizitaet = -1;
 
-            Tuple<List<Complex>, bool> iterationenTuple = iterieren(x, y, ITERATIONEN);
+            Tuple<List<Complex>, bool> iterationenTuple = iterieren(x, y, iterationen);
             if (!iterationenTuple.Item2)
             {
                 periodizitaet = GetPeriodizitaet(iterationenTuple.Item1);

@@ -41,7 +41,8 @@
             <TextBox Name="IterationenTextBox" Grid.Column="2" Grid.Row="1"
                      Text="10000" />
 
-            <StackPanel Name="OptionsStackPanel" Grid.Row="1" Grid.Column="3" Orientation="Horizontal">
+            <StackPanel Name="OptionsStackPanel" Grid.Row="1" Grid.Column="3" 
+                        Orientation="Horizontal" Margin="10,0,0,0">
                 <Button Name="ZeichnenButton" Content="Zeichnen" Click="ZeichnenButton_Click" />
                 <TextBlock Name="ProgressTextBlock" 
                        Margin="15,0,0,0" VerticalAlignment="Center" />

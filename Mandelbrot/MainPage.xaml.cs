@@ -75,7 +75,7 @@ namespace Mandelbrot
                                     ProgressRing.IsActive = true;
                                 }));
 
-                    Tuple<int, List<Complex>> tuple = FileManager.Berechne(x, y);
+                    Tuple<int, List<Complex>> tuple = FileManager.Berechne(x, y, FileManager.ITERATIONEN);
 
                     await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
                                 CoreDispatcherPriority.High,

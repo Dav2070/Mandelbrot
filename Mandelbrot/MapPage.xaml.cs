@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -46,8 +47,9 @@ namespace Mandelbrot
         {
             int faktor = int.Parse(FaktorTextBox.Text);
             double genauigkeit = double.Parse(GenauigkeitTextBox.Text);
+            int iterationen = int.Parse(IterationenTextBox.Text);
 
-            CreateMap(faktor, genauigkeit);
+            CreateMap(faktor, genauigkeit, iterationen);
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -55,8 +57,11 @@ namespace Mandelbrot
             asyncAction.Cancel();
         }
 
-        private void CreateMap(int faktor, double genauigkeit)
+        private void CreateMap(int faktor, double genauigkeit, int iterationen)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             _root = FileManager.GetVisual(MapStackPanel);
 
             // Get the current compositor
@@ -107,7 +112,7 @@ namespace Mandelbrot
                                 && y - ursprung.Imaginary < 5 && y - ursprung.Imaginary > -5)
                             {
                                 Complex complex = new Complex(x - ursprung.Real, y - ursprung.Imaginary);
-                                Tuple<int, List<Complex>> tuple = FileManager.Berechne(complex.Real, complex.Imaginary);
+                                Tuple<int, List<Complex>> tuple = FileManager.Berechne(complex.Real, complex.Imaginary, iterationen);
                                 periodizitaet = tuple.Item1;
                                 berechnungen++;
                                 tuple = null;
@@ -163,10 +168,13 @@ namespace Mandelbrot
                                 CoreDispatcherPriority.High,
                                 new DispatchedHandler(() =>
                                 {
-                                    ProgressTextBlock.Text = fortschritt.ToString();
+                                    ProgressTextBlock.Text = fortschritt.ToString() + " %";
                                     ProgressBar.Value = fortschritt;
                                 }));
                     }
+
+                    stopwatch.Stop();
+                    string elapsedTime = stopwatch.Elapsed.ToString();
 
                     await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
                         CoreDispatcherPriority.High,
@@ -175,8 +183,8 @@ namespace Mandelbrot
                             // Reset UI
                             //CancelButton.Visibility = Visibility.Collapsed;
                             ProgressBar.Value = 0;
-                            ProgressTextBlock.Text = berechnungen.ToString() + " Berechnungen";
-                            Debug.WriteLine("Berechnungen: " + berechnungen);
+                            ProgressTextBlock.Text = berechnungen.ToString() + " Berechnungen in " + elapsedTime;
+                            Debug.WriteLine("Berechnungen: " + berechnungen + ", vergangene Zeit: " + elapsedTime);
                         }));
                 });
 
