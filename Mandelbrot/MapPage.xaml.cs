@@ -33,6 +33,10 @@ namespace Mandelbrot
         private ContainerVisual _root;
         IAsyncAction asyncAction;
 
+        int faktor = 200;
+        double genauigkeit = 0.1;
+        int iterationen = 10000;
+
         public MapPage()
         {
             this.InitializeComponent();
@@ -41,15 +45,6 @@ namespace Mandelbrot
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
 
-        }
-
-        private void ZeichnenButton_Click(object sender, RoutedEventArgs e)
-        {
-            int faktor = int.Parse(FaktorTextBox.Text);
-            double genauigkeit = double.Parse(GenauigkeitTextBox.Text);
-            int iterationen = int.Parse(IterationenTextBox.Text);
-
-            CreateMap(faktor, genauigkeit, iterationen);
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -204,6 +199,33 @@ namespace Mandelbrot
                             }
                         }));
                 });
+        }
+
+        private void ZeichnenButton_Click(object sender, RoutedEventArgs e)
+        {
+            CreateMap(faktor, genauigkeit, iterationen);
+        }
+
+        private void ContentRoot_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            double x = e.GetPosition(ContentRoot).X;
+            double y = e.GetPosition(ContentRoot).Y - ControlsGrid.ActualHeight;
+            Debug.WriteLine(x + " " + y);
+        }
+
+        private void GenauigkeitTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            double.TryParse(GenauigkeitTextBox.Text, out genauigkeit);
+        }
+
+        private void FaktorTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int.TryParse(FaktorTextBox.Text, out faktor);
+        }
+
+        private void IterationenTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int.TryParse(IterationenTextBox.Text, out iterationen);
         }
     }
 }

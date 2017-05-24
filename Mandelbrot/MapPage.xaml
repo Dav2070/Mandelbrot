@@ -8,14 +8,15 @@
     mc:Ignorable="d"
     Loaded="Page_Loaded">
 
-    <Grid Name="ContentRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Name="ContentRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          Tapped="ContentRoot_Tapped">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid>
+        <Grid Name="ControlsGrid">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -33,13 +34,13 @@
             <TextBlock Text="Iterationen" Grid.Column="2" Grid.Row="0" />
 
             <TextBox Name="GenauigkeitTextBox" Grid.Column="0" Grid.Row="1" 
-                     Text="0,1" PlaceholderText="Genauigkeit" InputScope="AlphanumericFullWidth"
-                     Margin="0,0,10,0" />
+                     Text="{x:Bind genauigkeit}" PlaceholderText="Genauigkeit" InputScope="AlphanumericFullWidth"
+                     Margin="0,0,10,0" TextChanged="GenauigkeitTextBox_TextChanged" />
             <TextBox Name="FaktorTextBox" Grid.Column="1" Grid.Row="1" 
-                     Text="200" PlaceholderText="Faktor" InputScope="AlphanumericFullWidth"
-                     Margin="0,0,10,0" />
+                     Text="{x:Bind faktor}" PlaceholderText="Faktor" InputScope="AlphanumericFullWidth"
+                     Margin="0,0,10,0" TextChanged="FaktorTextBox_TextChanged" />
             <TextBox Name="IterationenTextBox" Grid.Column="2" Grid.Row="1"
-                     Text="10000" />
+                     Text="{x:Bind iterationen}" TextChanged="IterationenTextBox_TextChanged" />
 
             <StackPanel Name="OptionsStackPanel" Grid.Row="1" Grid.Column="3" 
                         Orientation="Horizontal" Margin="10,0,0,0">
