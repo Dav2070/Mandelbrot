@@ -27,6 +27,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="Genauigkeit" Grid.Column="0" Grid.Row="0" Margin="0,0,10,0" />
@@ -41,8 +42,19 @@
                      Margin="0,0,10,0" TextChanged="FaktorTextBox_TextChanged" />
             <TextBox Name="IterationenTextBox" Grid.Column="2" Grid.Row="1"
                      Text="{x:Bind iterationen}" TextChanged="IterationenTextBox_TextChanged" />
+            <ComboBox Name="ColorPaletteComboBox" Grid.Column="3" Grid.Row="1">
+                <ComboBoxItem Name="StandardColorComboBox" IsSelected="True" Content="Standard" />
+                <ComboBoxItem Name="RedColorComboBox" Content="Rot" />
+                <ComboBoxItem Name="IndigoColorComboBox" Content="Indigo" />
+                <ComboBoxItem Name="BlueColorComboBox" Content="Blau" />
+                <ComboBoxItem Name="CyanColorComboBox" Content="Cyan" />
+                <ComboBoxItem Name="TealColorComboBox" Content="Aquamarin" />
+                <ComboBoxItem Name="OrangeColorComboBox" Content="Orange" />
+                <ComboBoxItem Name="GreyColorComboBox" Content="Grau" />
+                <ComboBoxItem Name="BlueGreyColorComboBox" Content="Blau-Grau" />
+            </ComboBox>
 
-            <StackPanel Name="OptionsStackPanel" Grid.Row="1" Grid.Column="3" 
+            <StackPanel Name="OptionsStackPanel" Grid.Row="1" Grid.Column="4" 
                         Orientation="Horizontal" Margin="10,0,0,0">
                 <Button Name="ZeichnenButton" Content="Zeichnen" Click="ZeichnenButton_Click" />
                 <TextBlock Name="ProgressTextBlock" 

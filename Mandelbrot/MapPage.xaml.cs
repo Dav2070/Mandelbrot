@@ -96,26 +96,7 @@ namespace Mandelbrot
 
             // Get the current compositor
             Compositor compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
-            /*
-            CompositionColorBrush white = compositor.CreateColorBrush(Colors.White);
-            CompositionColorBrush orange = compositor.CreateColorBrush(Colors.Orange);
-            CompositionColorBrush red = compositor.CreateColorBrush(Colors.Red);
-            CompositionColorBrush blue = compositor.CreateColorBrush(Colors.Blue);
-            CompositionColorBrush darkBlue = compositor.CreateColorBrush(Colors.DarkBlue);
-            CompositionColorBrush cyan = compositor.CreateColorBrush(Colors.Cyan);
-            CompositionColorBrush aqua = compositor.CreateColorBrush(Colors.Aqua);
-            CompositionColorBrush black = compositor.CreateColorBrush(Colors.Black);
-            */
-            CompositionColorBrush colorOne = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#1a237e"));
-            CompositionColorBrush colorTwo = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#283593"));
-            CompositionColorBrush colorThree = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#303f9f"));
-            CompositionColorBrush colorFour = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#3949ab"));
-            CompositionColorBrush colorFive = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#3f51b5"));
-            CompositionColorBrush colorSix = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#5c6bc0"));
-            CompositionColorBrush colorSeven = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#7986cb"));
-            CompositionColorBrush colorEight = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#9fa8da"));
-            CompositionColorBrush colorNine = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#c5cae9"));
-            CompositionColorBrush colorTen = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e8eaf6"));
+            SetColorPalette(compositor);
 
             int berechnungen = 0;
             double fortschritt = 0;
@@ -143,43 +124,26 @@ namespace Mandelbrot
                                 GC.Collect();
                                 GC.WaitForPendingFinalizers();
                             }
-                            
-                            switch (periodizitaet)
-                            {
-                                case -1:
-                                    rect.Brush = colorTen;
-                                    break;
-                                case 1:
-                                    rect.Brush = colorOne;
-                                    break;
-                                case 2:
-                                    rect.Brush = colorTwo;
-                                    break;
-                                case 3:
-                                    rect.Brush = colorThree;
-                                    break;
-                                case 4:
-                                    rect.Brush = colorFour;
-                                    break;
-                                case 5:
-                                    rect.Brush = colorFive;
-                                    break;
-                                case 6:
-                                    rect.Brush = colorSix;
-                                    break;
-                                case 7:
-                                    rect.Brush = colorSeven;
-                                    break;
-                                case 8:
-                                    rect.Brush = colorEight;
-                                    break;
-                                case 9:
-                                    rect.Brush = colorNine;
-                                    break;
-                                default:
-                                    rect.Brush = colorTen;
-                                    break;
-                            }
+                            // Set the color for the given periodicity
+                            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                                CoreDispatcherPriority.High,
+                                new DispatchedHandler(() =>
+                                {
+                                    List<CompositionColorBrush> brushList = SetColorPalette(compositor);
+
+                                    if (periodizitaet < 1)
+                                    {
+                                        rect.Brush = compositor.CreateColorBrush(Colors.White);
+                                    }
+                                    else if (periodizitaet >= brushList.Count)
+                                    {   // Last color of the list is the color for high periodicity
+                                        rect.Brush = brushList.Last();
+                                    }
+                                    else
+                                    {
+                                        rect.Brush = brushList.ElementAt(periodizitaet);
+                                    }
+                                }));
                             
                             //rect.Brush = compositor.CreateColorBrush(Color.FromArgb(255, byte.Parse(((berechnungen/periodizitaet)/7).ToString()), byte.Parse(((berechnungen/periodizitaet) / 7).ToString()), byte.Parse((periodizitaet / 4).ToString()))); //(CompositionBrush) Color.FromArgb(255, (byte)periodizitaet, byte.Parse((periodizitaet / 2).ToString()), byte.Parse((periodizitaet / 5).ToString()));
                             rect.Size = new Vector2(faktor, faktor);
@@ -258,6 +222,130 @@ namespace Mandelbrot
             //ursprungY = ursprungY - (ursprungY / 3);
             Bindings.Update();
             CreateMap();
+        }
+
+        private List<CompositionColorBrush> SetColorPalette(Compositor compositor)
+        {
+            List<CompositionColorBrush> brushList = new List<CompositionColorBrush>();
+
+            // https://material.io/guidelines/style/color.html#color-color-palette
+            if (ColorPaletteComboBox.SelectedItem == StandardColorComboBox)
+            {
+                brushList.Add(compositor.CreateColorBrush(Colors.Orange));
+                brushList.Add(compositor.CreateColorBrush(Colors.Red));
+                brushList.Add(compositor.CreateColorBrush(Colors.Blue));
+                brushList.Add(compositor.CreateColorBrush(Colors.DarkBlue));
+                brushList.Add(compositor.CreateColorBrush(Colors.Cyan));
+                brushList.Add(compositor.CreateColorBrush(Colors.Aqua));
+                brushList.Add(compositor.CreateColorBrush(Colors.Black));
+                brushList.Add(compositor.CreateColorBrush(Colors.LightGray));
+            }
+            else if(ColorPaletteComboBox.SelectedItem == RedColorComboBox)
+            {
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#b71c1c")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#c62828")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#d32f2f")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e53935")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#f44336")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ef5350")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e57373")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ef9a9a")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ffcdd2")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ffebee")));
+            }
+            else if (ColorPaletteComboBox.SelectedItem == IndigoColorComboBox)
+            {
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#1a237e")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#283593")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#303f9f")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#3949ab")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#3f51b5")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#5c6bc0")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#7986cb")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#9fa8da")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#c5cae9")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e8eaf6")));
+            }
+            else if (ColorPaletteComboBox.SelectedItem == BlueColorComboBox)
+            {
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#0d47a1")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#1565c0")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#1976d2")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#1e88e5")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#2196f3")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#42a5f5")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#64b5f6")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#90caf9")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#bbdefb")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e3f2fd")));
+            }
+            else if (ColorPaletteComboBox.SelectedItem == CyanColorComboBox)
+            {
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#006064")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#00838f")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#0097a7")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#00acc1")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#00bcd4")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#26c6da")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#4dd0e1")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#80deea")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#b2ebf2")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e0f7fa")));
+            }
+            else if (ColorPaletteComboBox.SelectedItem == TealColorComboBox)
+            {
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#004d40")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#00695c")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#00796b")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#00897b")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#009688")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#26a69a")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#4db6ac")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#80cbc4")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#b2dfdb")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e0f2f1")));
+            }
+            else if (ColorPaletteComboBox.SelectedItem == OrangeColorComboBox)
+            {
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e65100")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ef6c00")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#f57c00")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#fb8c00")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ff9800")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ffa726")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ffb74d")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ffcc80")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ffe0b2")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#fff3e0")));
+            }
+            else if (ColorPaletteComboBox.SelectedItem == GreyColorComboBox)
+            {
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#212121")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#424242")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#616161")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#757575")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#9e9e9e")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#bdbdbd")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e0e0e0")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#eeeeee")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#f5f5f5")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#fafafa")));
+            }
+            else if (ColorPaletteComboBox.SelectedItem == BlueGreyColorComboBox)
+            {
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#263238")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#37474f")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#455a64")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#546e7a")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#607d8b")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#78909c")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#90a4ae")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#b0bec5")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#cfd8dc")));
+                brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#eceff1")));
+            }
+
+            return brushList;
         }
 
         private void ZeichnenButton_Click(object sender, RoutedEventArgs e)
