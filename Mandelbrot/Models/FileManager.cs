@@ -5,9 +5,11 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 using Windows.UI.Composition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Hosting;
+using Windows.UI.Xaml.Media;
 
 namespace Mandelbrot
 {
@@ -136,6 +138,17 @@ namespace Mandelbrot
                 }
             }
             return newList;
+        }
+
+        // Methods not specific to this project
+        public static Color GetSolidColorBrush(string hex)
+        {
+            hex = hex.Replace("#", string.Empty);
+            //byte a = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
+            byte r = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
+            byte g = (byte)(Convert.ToUInt32(hex.Substring(2, 2), 16));
+            byte b = (byte)(Convert.ToUInt32(hex.Substring(4, 2), 16));
+            return Color.FromArgb(255, r, g, b);
         }
     }
 }

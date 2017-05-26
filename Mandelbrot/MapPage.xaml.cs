@@ -32,10 +32,18 @@ namespace Mandelbrot
     {
         private ContainerVisual _root;
         IAsyncAction asyncAction;
-
+        bool isCalculating = false;
+        bool canvasIsEmpty = true;
         int faktor = 200;
         double genauigkeit = 0.1;
         int iterationen = 10000;
+        double pixelHeight;
+        double pixelWidth;
+        double width = 100;
+        double height = 100;
+        double ursprungX;
+        double ursprungY;
+        Complex ursprung;
 
         public MapPage()
         {
@@ -44,7 +52,31 @@ namespace Mandelbrot
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            CreateUrsprung();
+            GetHeightAndWidth();
+        }
 
+        private void GetHeightAndWidth()
+        {
+            width = Window.Current.Bounds.Width;
+            height = Window.Current.Bounds.Height - ControlsGrid.ActualHeight;
+
+            pixelWidth = width / faktor;
+            pixelHeight = height / faktor;
+        }
+
+        private void CreateUrsprung()
+        {
+            // Ursprung = (x/1,5|y/2)
+            // Oben links Ecke = (x-ursprungX|y-ursprungY)
+            // Oben links Ecke + x1 = (x-ursprungX|y-ursprungY)
+
+            ursprungX = (pixelWidth / 1.5);
+            ursprungY = (pixelHeight / 2);
+            ursprung = new Complex(ursprungX, ursprungY);
+
+            Debug.WriteLine(ursprungX + " " + ursprungY);
+            Debug.WriteLine("PixelWidth: " + pixelWidth + " pixelHeight: " + pixelHeight);
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -52,16 +84,19 @@ namespace Mandelbrot
             asyncAction.Cancel();
         }
 
-        private void CreateMap(int faktor, double genauigkeit, int iterationen)
+        private void CreateMap()
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
+            isCalculating = true;
+            canvasIsEmpty = false;
+            GetHeightAndWidth();
 
             _root = FileManager.GetVisual(MapStackPanel);
 
             // Get the current compositor
             Compositor compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
-
+            /*
             CompositionColorBrush white = compositor.CreateColorBrush(Colors.White);
             CompositionColorBrush orange = compositor.CreateColorBrush(Colors.Orange);
             CompositionColorBrush red = compositor.CreateColorBrush(Colors.Red);
@@ -70,25 +105,19 @@ namespace Mandelbrot
             CompositionColorBrush cyan = compositor.CreateColorBrush(Colors.Cyan);
             CompositionColorBrush aqua = compositor.CreateColorBrush(Colors.Aqua);
             CompositionColorBrush black = compositor.CreateColorBrush(Colors.Black);
+            */
+            CompositionColorBrush colorOne = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#1a237e"));
+            CompositionColorBrush colorTwo = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#283593"));
+            CompositionColorBrush colorThree = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#303f9f"));
+            CompositionColorBrush colorFour = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#3949ab"));
+            CompositionColorBrush colorFive = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#3f51b5"));
+            CompositionColorBrush colorSix = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#5c6bc0"));
+            CompositionColorBrush colorSeven = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#7986cb"));
+            CompositionColorBrush colorEight = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#9fa8da"));
+            CompositionColorBrush colorNine = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#c5cae9"));
+            CompositionColorBrush colorTen = compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e8eaf6"));
 
             int berechnungen = 0;
-
-            double width = Window.Current.Bounds.Width;
-            double height = Window.Current.Bounds.Height;
-
-            double pixelOverall = (width * height) / faktor;
-            double pixelWidth = width/faktor;
-            double pixelHeight = height/faktor;
-            Debug.WriteLine("PixelHeight: " + pixelHeight);
-
-            // Ursprung = (x/1,5|y/2)
-            // Oben links Ecke = (x-ursprungX|y-ursprungY)
-            // Oben links Ecke + x1 = (x-ursprungX|y-ursprungY)
-            double ursprungX = (pixelWidth / 1.5);
-            double ursprungY = (pixelHeight / 2);
-            Complex ursprung = new Complex(ursprungX, ursprungY);
-            Debug.WriteLine("Ursprung X: " + ursprungX + " Ursprung Y: " + ursprungY);
-
             double fortschritt = 0;
             //CancelButton.Visibility = Visibility.Visible;
 
@@ -100,13 +129,12 @@ namespace Mandelbrot
                         for (double x = 0; x < pixelWidth; x = x + genauigkeit)
                         {
                             SpriteVisual rect = compositor.CreateSpriteVisual();
-                            //Debug.WriteLine(Math.Floor(Decimal.Ceiling(x / 10) / 2));
 
                             int periodizitaet = -1;
-                            if (x - ursprung.Real < 5 && x - ursprung.Real > -5
-                                && y - ursprung.Imaginary < 5 && y - ursprung.Imaginary > -5)
+                            if (x - ursprungX < 5 && x - ursprungX > -5
+                                && y - ursprungY < 5 && y - ursprungY > -5)
                             {
-                                Complex complex = new Complex(x - ursprung.Real, y - ursprung.Imaginary);
+                                Complex complex = new Complex(x - ursprungX, y - ursprungY);
                                 Tuple<int, List<Complex>> tuple = FileManager.Berechne(complex.Real, complex.Imaginary, iterationen);
                                 periodizitaet = tuple.Item1;
                                 berechnungen++;
@@ -119,28 +147,37 @@ namespace Mandelbrot
                             switch (periodizitaet)
                             {
                                 case -1:
-                                    rect.Brush = white;
+                                    rect.Brush = colorTen;
                                     break;
                                 case 1:
-                                    rect.Brush = orange;
+                                    rect.Brush = colorOne;
                                     break;
                                 case 2:
-                                    rect.Brush = red;
+                                    rect.Brush = colorTwo;
                                     break;
                                 case 3:
-                                    rect.Brush = cyan;
+                                    rect.Brush = colorThree;
                                     break;
                                 case 4:
-                                    rect.Brush = blue;
+                                    rect.Brush = colorFour;
                                     break;
                                 case 5:
-                                    rect.Brush = darkBlue;
+                                    rect.Brush = colorFive;
                                     break;
                                 case 6:
-                                    rect.Brush = black;
+                                    rect.Brush = colorSix;
+                                    break;
+                                case 7:
+                                    rect.Brush = colorSeven;
+                                    break;
+                                case 8:
+                                    rect.Brush = colorEight;
+                                    break;
+                                case 9:
+                                    rect.Brush = colorNine;
                                     break;
                                 default:
-                                    rect.Brush = white;
+                                    rect.Brush = colorTen;
                                     break;
                             }
                             
@@ -169,7 +206,9 @@ namespace Mandelbrot
                     }
 
                     stopwatch.Stop();
+                    Debug.WriteLine(ursprungX + " " + ursprungY);
                     string elapsedTime = stopwatch.Elapsed.ToString();
+                    isCalculating = false;
 
                     await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
                         CoreDispatcherPriority.High,
@@ -201,16 +240,39 @@ namespace Mandelbrot
                 });
         }
 
+        private void ZoomIn(double x, double y)
+        {
+            // Get middle of canvas in pixel
+            double xMitte = (width / faktor) / 2;
+            double yMitte = (height / faktor) / 2;
+            // Translate the clicked point into pixel
+            double xPixel = x / faktor;
+            double yPixel = y / faktor;
+
+            Debug.WriteLine("Clicked point: " + xPixel/ ursprungX + " " + yPixel/ ursprungY);
+            ursprungX = ursprungX + (xMitte-xPixel);
+            ursprungY = ursprungY + (yMitte-yPixel);
+
+            faktor = faktor + 200;
+            //ursprungX = ursprungX - (ursprungX / 3);
+            //ursprungY = ursprungY - (ursprungY / 3);
+            Bindings.Update();
+            CreateMap();
+        }
+
         private void ZeichnenButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateMap(faktor, genauigkeit, iterationen);
+            CreateMap();
         }
 
         private void ContentRoot_Tapped(object sender, TappedRoutedEventArgs e)
         {
             double x = e.GetPosition(ContentRoot).X;
             double y = e.GetPosition(ContentRoot).Y - ControlsGrid.ActualHeight;
-            Debug.WriteLine(x + " " + y);
+            if(y > 0 && !isCalculating && !canvasIsEmpty)
+            {
+                ZoomIn(x, y);
+            }
         }
 
         private void GenauigkeitTextBox_TextChanged(object sender, TextChangedEventArgs e)
