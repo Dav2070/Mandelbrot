@@ -52,8 +52,8 @@ namespace Mandelbrot
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            CreateUrsprung();
             GetHeightAndWidth();
+            CreateUrsprung();
         }
 
         private void GetHeightAndWidth()
