@@ -28,11 +28,13 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="Genauigkeit" Grid.Column="0" Grid.Row="0" Margin="0,0,10,0" />
             <TextBlock Text="Faktor" Grid.Column="1" Grid.Row="0" />
             <TextBlock Text="Iterationen" Grid.Column="2" Grid.Row="0" />
+            <TextBlock Text="Position" Margin="10,0,0,0" Grid.Column="3" Grid.ColumnSpan="1" Grid.Row="0" />
 
             <TextBox Name="GenauigkeitTextBox" Grid.Column="0" Grid.Row="1" 
                      Text="{x:Bind genauigkeit}" PlaceholderText="Genauigkeit" InputScope="AlphanumericFullWidth"
@@ -42,7 +44,13 @@
                      Margin="0,0,10,0" TextChanged="FaktorTextBox_TextChanged" />
             <TextBox Name="IterationenTextBox" Grid.Column="2" Grid.Row="1"
                      Margin="0,0,10,0" Text="{x:Bind iterationen}" TextChanged="IterationenTextBox_TextChanged" />
-            <ComboBox Name="ColorPaletteComboBox" Grid.Column="3" Grid.Row="1">
+
+            <StackPanel Grid.Row="1" Grid.Column="3" Margin="0,0,10,0" Orientation="Horizontal">
+                <TextBox Name="PositionXTextBox" Text="{x:Bind ursprungX}" TextChanged="PositionXTextBox_TextChanged" Margin="0,0,10,0" />
+                <TextBox Name="PositionYTextBox" Text="{x:Bind ursprungY}" TextChanged="PositionYTextBox_TextChanged" />
+            </StackPanel>
+
+            <ComboBox Name="ColorPaletteComboBox" Grid.Column="4" Grid.Row="1">
                 <ComboBoxItem Name="StandardColorComboBoxItem" IsSelected="True" Content="Standard" />
                 <ComboBoxItem Name="RedColorComboBoxItem" Content="Rot" />
                 <ComboBoxItem Name="IndigoColorComboBoxItem" Content="Indigo" />
@@ -54,7 +62,7 @@
                 <ComboBoxItem Name="BlueGreyColorComboBoxItem" Content="Blau-Grau" />
             </ComboBox>
 
-            <StackPanel Name="OptionsStackPanel" Grid.Row="1" Grid.Column="4" 
+            <StackPanel Name="OptionsStackPanel" Grid.Column="5" Grid.Row="1"
                         Orientation="Horizontal" Margin="10,0,0,0">
                 <Button Name="ZeichnenButton" Content="Zeichnen" Click="ZeichnenButton_Click" />
                 <TextBlock Name="ProgressTextBlock" 

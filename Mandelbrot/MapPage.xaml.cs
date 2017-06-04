@@ -74,6 +74,7 @@ namespace Mandelbrot
             ursprungX = (pixelWidth / 1.5);
             ursprungY = (pixelHeight / 2);
             ursprung = new Complex(ursprungX, ursprungY);
+            Bindings.Update();
 
             Debug.WriteLine(ursprungX + " " + ursprungY);
             Debug.WriteLine("PixelWidth: " + pixelWidth + " pixelHeight: " + pixelHeight);
@@ -376,6 +377,16 @@ namespace Mandelbrot
         private void IterationenTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             int.TryParse(IterationenTextBox.Text, out iterationen);
+        }
+
+        private void PositionXTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            double.TryParse(PositionXTextBox.Text, out ursprungX);
+        }
+
+        private void PositionYTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            double.TryParse(PositionYTextBox.Text, out ursprungY);
         }
     }
 }
