@@ -229,7 +229,7 @@ namespace Mandelbrot
             List<CompositionColorBrush> brushList = new List<CompositionColorBrush>();
 
             // https://material.io/guidelines/style/color.html#color-color-palette
-            if (ColorPaletteComboBox.SelectedItem == StandardColorComboBox)
+            if (ColorPaletteComboBox.SelectedItem == StandardColorComboBoxItem)
             {
                 brushList.Add(compositor.CreateColorBrush(Colors.Orange));
                 brushList.Add(compositor.CreateColorBrush(Colors.Red));
@@ -240,7 +240,7 @@ namespace Mandelbrot
                 brushList.Add(compositor.CreateColorBrush(Colors.Black));
                 brushList.Add(compositor.CreateColorBrush(Colors.LightGray));
             }
-            else if(ColorPaletteComboBox.SelectedItem == RedColorComboBox)
+            else if(ColorPaletteComboBox.SelectedItem == RedColorComboBoxItem)
             {
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#b71c1c")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#c62828")));
@@ -253,7 +253,7 @@ namespace Mandelbrot
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ffcdd2")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ffebee")));
             }
-            else if (ColorPaletteComboBox.SelectedItem == IndigoColorComboBox)
+            else if (ColorPaletteComboBox.SelectedItem == IndigoColorComboBoxItem)
             {
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#1a237e")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#283593")));
@@ -266,7 +266,7 @@ namespace Mandelbrot
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#c5cae9")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e8eaf6")));
             }
-            else if (ColorPaletteComboBox.SelectedItem == BlueColorComboBox)
+            else if (ColorPaletteComboBox.SelectedItem == BlueColorComboBoxItem)
             {
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#0d47a1")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#1565c0")));
@@ -279,7 +279,7 @@ namespace Mandelbrot
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#bbdefb")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e3f2fd")));
             }
-            else if (ColorPaletteComboBox.SelectedItem == CyanColorComboBox)
+            else if (ColorPaletteComboBox.SelectedItem == CyanColorComboBoxItem)
             {
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#006064")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#00838f")));
@@ -292,7 +292,7 @@ namespace Mandelbrot
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#b2ebf2")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e0f7fa")));
             }
-            else if (ColorPaletteComboBox.SelectedItem == TealColorComboBox)
+            else if (ColorPaletteComboBox.SelectedItem == TealColorComboBoxItem)
             {
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#004d40")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#00695c")));
@@ -305,7 +305,7 @@ namespace Mandelbrot
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#b2dfdb")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e0f2f1")));
             }
-            else if (ColorPaletteComboBox.SelectedItem == OrangeColorComboBox)
+            else if (ColorPaletteComboBox.SelectedItem == OrangeColorComboBoxItem)
             {
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#e65100")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ef6c00")));
@@ -318,7 +318,7 @@ namespace Mandelbrot
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#ffe0b2")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#fff3e0")));
             }
-            else if (ColorPaletteComboBox.SelectedItem == GreyColorComboBox)
+            else if (ColorPaletteComboBox.SelectedItem == GreyColorComboBoxItem)
             {
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#212121")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#424242")));
@@ -331,7 +331,7 @@ namespace Mandelbrot
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#f5f5f5")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#fafafa")));
             }
-            else if (ColorPaletteComboBox.SelectedItem == BlueGreyColorComboBox)
+            else if (ColorPaletteComboBox.SelectedItem == BlueGreyColorComboBoxItem)
             {
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#263238")));
                 brushList.Add(compositor.CreateColorBrush(FileManager.GetSolidColorBrush("#37474f")));

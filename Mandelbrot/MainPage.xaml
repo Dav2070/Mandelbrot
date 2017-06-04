@@ -27,7 +27,7 @@
                             Margin="20,0,0,0" Click="SeeMapButton_Click" />
                 </StackPanel>
                 <TextBlock Name="PeriodizitaetTextBlock" />
-                <TextBlock Name="OutputTextBlock" />
+                <TextBlock Name="OutputTextBlock" IsTextSelectionEnabled="True" />
             </StackPanel>
         </ScrollViewer>
     </Grid>
