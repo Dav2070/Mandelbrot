@@ -51,12 +51,6 @@ namespace Mandelbrot
             ContentRoot.DataContext = (App.Current as App)._itemViewHolder;
         }
 
-        private void SeeMapButton_Click(object sender, RoutedEventArgs e)
-        {
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-            (App.Current as App)._itemViewHolder.page = typeof(MapPage);
-        }
-
         private void SendNumberTextBox_Click(object sender, RoutedEventArgs e)
         {
             double x = -0.5;
@@ -93,6 +87,18 @@ namespace Mandelbrot
                                     ProgressRing.IsActive = false;
                                 }));
                 });
+        }
+
+        private void SeeMapButton_Click(object sender, RoutedEventArgs e)
+        {
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            (App.Current as App)._itemViewHolder.page = typeof(MapPage);
+        }
+
+        private void BordersButton_Click(object sender, RoutedEventArgs e)
+        {
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            (App.Current as App)._itemViewHolder.page = typeof(BordersPage);
         }
     }
 }

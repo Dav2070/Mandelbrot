@@ -140,6 +140,33 @@ namespace Mandelbrot
             return newList;
         }
 
+        public static List<int> CalculatePeriodicityBetweenPoints(Complex startPoint, Complex endPoint, double steps)
+        {
+            List<int> periodicityList = new List<int>();
+
+            // Get points between the points
+            // Get difference between points and divide through steps
+            double differenceX = endPoint.Real - startPoint.Real;
+            double differenceY = endPoint.Imaginary - startPoint.Imaginary;
+            // Schrittweite
+            double stepWidthX = differenceX / steps;
+            double stepWidthY = differenceY / steps;
+            Debug.WriteLine("Schrittweite: " + stepWidthX + " " + stepWidthY);
+            Debug.WriteLine("Differenz: " + differenceX + " " + differenceY);
+
+            // Make the steps and calculate the periodicity
+            for (int i = 1; i < steps+1; i++)
+            {
+                double x = startPoint.Real + (i * stepWidthX);
+                double y = startPoint.Imaginary + (i * stepWidthY);
+                Debug.WriteLine("X: " + x + " Y: " + y);
+                Tuple<int, List<Complex>> resultTuple = Berechne(x, y, ITERATIONEN);
+                periodicityList.Add(resultTuple.Item1);
+            }
+
+            return periodicityList;
+        }
+
         // Methods not specific to this project
         public static Color GetSolidColorBrush(string hex)
         {

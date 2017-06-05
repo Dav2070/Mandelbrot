@@ -25,6 +25,8 @@
                         Width="25" Height="25" Margin="10,0,0,0" />
                     <Button Name="SeeMapButton" Content="Karte"
                             Margin="20,0,0,0" Click="SeeMapButton_Click" />
+                    <Button Name="BordersButton" Content="Grenzen"
+                            Margin="20,0,0,0" Click="BordersButton_Click" />
                 </StackPanel>
                 <TextBlock Name="PeriodizitaetTextBlock" />
                 <TextBlock Name="OutputTextBlock" IsTextSelectionEnabled="True" />
