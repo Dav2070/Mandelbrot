@@ -78,6 +78,10 @@ namespace Mandelbrot
             {
                 if (IsKonvergent(createListe(complexList, periodizitaet)))
                 {
+                    if(periodizitaet == FileManager.MAX_PERIODIZITAET)
+                    {
+                        return 0;
+                    }
                     return periodizitaet;
                 }
                 else
@@ -140,9 +144,10 @@ namespace Mandelbrot
             return newList;
         }
 
-        public static List<int> CalculatePeriodicityBetweenPoints(Complex startPoint, Complex endPoint, double steps)
+        public static Tuple<List<int>, List<Complex>> CalculatePeriodicityBetweenPoints(Complex startPoint, Complex endPoint, double steps)
         {
             List<int> periodicityList = new List<int>();
+            List<Complex> complexList = new List<Complex>();
 
             // Get points between the points
             // Get difference between points and divide through steps
@@ -159,12 +164,15 @@ namespace Mandelbrot
             {
                 double x = startPoint.Real + (i * stepWidthX);
                 double y = startPoint.Imaginary + (i * stepWidthY);
+                Complex complexPoint = new Complex(x, y);
                 Debug.WriteLine("X: " + x + " Y: " + y);
                 Tuple<int, List<Complex>> resultTuple = Berechne(x, y, ITERATIONEN);
+
+                complexList.Add(complexPoint);
                 periodicityList.Add(resultTuple.Item1);
             }
 
-            return periodicityList;
+            return new Tuple<List<int>, List<Complex>>(periodicityList, complexList);
         }
 
         // Methods not specific to this project

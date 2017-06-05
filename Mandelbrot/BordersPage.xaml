@@ -5,7 +5,21 @@
     xmlns:local="using:Mandelbrot"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:telerikChart="using:Telerik.UI.Xaml.Controls.Chart"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style
+            x:Key="LabelStyle"
+            TargetType="TextBlock">
+            <Setter
+                Property="FontSize"
+                Value="20"></Setter>
+            <Setter
+                Property="Foreground"
+                Value="Black"></Setter>
+        </Style>
+    </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -13,7 +27,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
@@ -30,10 +45,54 @@
             <TextBlock Text="Anzahl Schritte: " />
             <TextBox Name="StepsTextBox" Margin="20,0,0,0" />
             <Button Name="CalculateButton" Margin="20,0,0,0" Content="Berechnen" Click="CalculateButton_Click" />
+            <ProgressRing Name="ProgressRing"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Width="25" Height="25" Margin="10,0,0,0" />
         </StackPanel>
 
-        <ScrollViewer Grid.Row="3">
-            <TextBlock Name="ResultTextBlock" />
+        <telerikChart:RadCartesianChart Grid.Row="3">
+            <telerikChart:RadCartesianChart.Grid>
+                <telerikChart:CartesianChartGrid
+                    MajorLinesVisibility="Y" />
+            </telerikChart:RadCartesianChart.Grid>
+            <telerikChart:RadCartesianChart.HorizontalAxis>
+                <telerikChart:DateTimeCategoricalAxis
+                    DateTimeComponent="Month"
+                    LabelFormat="{}{0,0:MMM}"
+                    LabelStyle="{StaticResource LabelStyle}"
+                    Title="Punkte" />
+            </telerikChart:RadCartesianChart.HorizontalAxis>
+            <telerikChart:RadCartesianChart.VerticalAxis>
+                <telerikChart:LinearAxis
+                    LabelStyle="{StaticResource LabelStyle}" Title="Periodizität" />
+            </telerikChart:RadCartesianChart.VerticalAxis>
+            <telerikChart:LineSeries ItemsSource="{x:Bind periodicityList}">
+                <telerikChart:LineSeries.ValueBinding>
+                    <telerikChart:PropertyNameDataPointBinding PropertyName="Test" />
+                </telerikChart:LineSeries.ValueBinding>
+                <telerikChart:LineSeries.CategoryBinding>
+                    <telerikChart:PropertyNameDataPointBinding PropertyName="Hello World" />
+                </telerikChart:LineSeries.CategoryBinding>
+            </telerikChart:LineSeries>
+        </telerikChart:RadCartesianChart>
+
+        <ScrollViewer Grid.Row="4">
+            <Grid Name="ResultTable">
+                <Grid.RowDefinitions>
+
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <!--
+                    <TextBlock Text="periodizität" Grid.Column="0" />
+                    <TextBlock Text="X" Grid.Column="1" />
+                    <TextBlock Text="Y" Grid.Column="2" />
+                -->
+            </Grid>
         </ScrollViewer>
     </Grid>
 </Page>
