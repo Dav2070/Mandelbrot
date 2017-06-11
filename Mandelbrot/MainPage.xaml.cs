@@ -75,7 +75,7 @@ namespace Mandelbrot
                                 CoreDispatcherPriority.High,
                                 new DispatchedHandler(() =>
                                 {
-                                    PeriodizitaetTextBlock.Text = tuple.Item1.ToString();
+                                    PeriodizitaetTextBlock.Text = "Periodizität: " + tuple.Item1.ToString();
                                     if (tuple.Item2.Count > 3)
                                     {
                                         foreach (Complex z in tuple.Item2)
@@ -83,7 +83,7 @@ namespace Mandelbrot
                                             OutputTextBlock.Text += z.ToString() + "\n";
                                         }
                                     }
-
+                                    
                                     ProgressRing.IsActive = false;
                                 }));
                 });

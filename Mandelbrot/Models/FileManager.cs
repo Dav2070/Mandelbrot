@@ -36,7 +36,6 @@ namespace Mandelbrot
             {
                 periodizitaet = GetPeriodizitaet(iterationenTuple.Item1);
             }
-
             return Tuple.Create(periodizitaet, iterationenTuple.Item1);
         }
 

@@ -90,6 +90,9 @@ namespace Mandelbrot
                 }
             }
 
+            double headerFontSize = 25;
+            double textFontSize = 22;
+
             // Add the header row
             // Add a new row
             RowDefinition headerRowDefinition = new RowDefinition();
@@ -98,16 +101,19 @@ namespace Mandelbrot
 
             TextBlock periodicityHeaderTextBlock = new TextBlock();
             periodicityHeaderTextBlock.Text = "Periodizität";
+            periodicityHeaderTextBlock.FontSize = headerFontSize;
             Grid.SetRow(periodicityHeaderTextBlock, 0);
             Grid.SetColumn(periodicityHeaderTextBlock, 0);
 
             TextBlock XHeaderTextBlock = new TextBlock();
             XHeaderTextBlock.Text = "X";
+            XHeaderTextBlock.FontSize = headerFontSize;
             Grid.SetRow(XHeaderTextBlock, 0);
             Grid.SetColumn(XHeaderTextBlock, 1);
 
             TextBlock YHeaderTextBlock = new TextBlock();
             YHeaderTextBlock.Text = "Y";
+            YHeaderTextBlock.FontSize = headerFontSize;
             Grid.SetRow(YHeaderTextBlock, 0);
             Grid.SetColumn(YHeaderTextBlock, 2);
 
@@ -126,16 +132,19 @@ namespace Mandelbrot
                 // Add the data
                 TextBlock periodicityTextBlock = new TextBlock();
                 periodicityTextBlock.Text = periodicityTuple.Item1.ElementAt(i).ToString();
+                periodicityTextBlock.FontSize = textFontSize;
                 Grid.SetColumn(periodicityTextBlock, 0);
                 Grid.SetRow(periodicityTextBlock, i + 1);
 
                 TextBlock XTextBlock = new TextBlock();
                 XTextBlock.Text = periodicityTuple.Item2.ElementAt(i).Real.ToString();
+                XTextBlock.FontSize = textFontSize;
                 Grid.SetColumn(XTextBlock, 1);
                 Grid.SetRow(XTextBlock, i + 1);
 
                 TextBlock YTextBlock = new TextBlock();
                 YTextBlock.Text = periodicityTuple.Item2.ElementAt(i).Imaginary.ToString();
+                YTextBlock.FontSize = textFontSize;
                 Grid.SetColumn(YTextBlock, 2);
                 Grid.SetRow(YTextBlock, i + 1);
 

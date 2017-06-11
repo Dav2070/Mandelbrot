@@ -9,7 +9,7 @@
     Loaded="Page_Loaded">
 
     <Grid Name="ContentRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-          Tapped="ContentRoot_Tapped">
+          Tapped="ContentRoot_Tapped" Margin="60,0,60,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />

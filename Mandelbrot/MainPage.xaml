@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     Loaded="MainPage_Loaded">
 
-    <Grid Name="ContentRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Name="ContentRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="60,0,60,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -28,8 +28,8 @@
                     <Button Name="BordersButton" Content="Grenzen"
                             Margin="20,0,0,0" Click="BordersButton_Click" />
                 </StackPanel>
-                <TextBlock Name="PeriodizitaetTextBlock" />
-                <TextBlock Name="OutputTextBlock" IsTextSelectionEnabled="True" />
+                <TextBlock Name="PeriodizitaetTextBlock" FontSize="23" />
+                <TextBlock Name="OutputTextBlock" IsTextSelectionEnabled="True" FontSize="20" />
             </StackPanel>
         </ScrollViewer>
     </Grid>
