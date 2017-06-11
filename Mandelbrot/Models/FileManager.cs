@@ -43,6 +43,7 @@ namespace Mandelbrot
         private static Tuple<List<Complex>, bool> iterieren(double x, double y, int n)
         {
             Complex c = new Complex(x, y);     // Startwert
+            // double exponent = 2;
 
             List<Complex> complexNumbers = new List<Complex>();
             complexNumbers.Add(new Complex(0, 0));
@@ -50,8 +51,9 @@ namespace Mandelbrot
 
             for (int i = 0; i < n; i++)
             {
+                // Complex z = new Complex(Math.Pow(complexNumbers.ElementAt(i).Real, exponent), Math.Pow(complexNumbers.ElementAt(i).Imaginary, exponent)) + c;
                 Complex z = complexNumbers.ElementAt(i) * complexNumbers.ElementAt(i) + c;
-                if((double.IsNaN(z.Imaginary) || double.IsNaN(z.Real)) ||
+                if ((double.IsNaN(z.Imaginary) || double.IsNaN(z.Real)) ||
                     (z.Imaginary > 5 || z.Imaginary < -5) ||
                     (z.Real > 5 || z.Real < -5))
                 {

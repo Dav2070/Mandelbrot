@@ -56,9 +56,15 @@
                     MajorLinesVisibility="Y" />
             </telerikChart:RadCartesianChart.Grid>
             <telerikChart:RadCartesianChart.HorizontalAxis>
-                <telerikChart:DateTimeCategoricalAxis
+                <!--       <telerikChart:DateTimeCategoricalAxis
                     DateTimeComponent="Month"
                     LabelFormat="{}{0,0:MMM}"
+                    LabelStyle="{StaticResource LabelStyle}"
+                    Title="Punkte" />
+                -->
+            <telerikChart:CategoricalAxis
+                    LabelInterval="10"
+                    ShowLabels="False"
                     LabelStyle="{StaticResource LabelStyle}"
                     Title="Punkte" />
             </telerikChart:RadCartesianChart.HorizontalAxis>
