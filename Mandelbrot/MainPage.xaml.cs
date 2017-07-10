@@ -75,7 +75,7 @@ namespace Mandelbrot
                                 CoreDispatcherPriority.High,
                                 new DispatchedHandler(() =>
                                 {
-                                    PeriodizitaetTextBlock.Text = "Periodizität: " + tuple.Item1.ToString();
+                                    PeriodizitaetTextBlock.Text = (new Windows.ApplicationModel.Resources.ResourceLoader()).GetString("Periodicity") + ": " + tuple.Item1.ToString();
                                     if (tuple.Item2.Count > 3)
                                     {
                                         foreach (Complex z in tuple.Item2)

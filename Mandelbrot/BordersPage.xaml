@@ -32,19 +32,19 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TextBlock Text="Von: " />
+            <TextBlock x:Uid="BordersFrom" Text="From: " />
             <TextBox Name="StartPointXTextBox" Margin="20,0,0,0" />
             <TextBox Name="StartPointYTextBox" Margin="20,0,0,0" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <TextBlock Text="Bis: " />
+            <TextBlock x:Uid="BordersTo" Text="To: " />
             <TextBox Name="EndPointXTextBox" Margin="20,0,0,0" />
             <TextBox Name="EndPointYTextBox" Margin="20,0,0,0" />
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <TextBlock Text="Anzahl Schritte: " />
+            <TextBlock x:Uid="BordersNumberOfSteps" Text="Number of Steps: " />
             <TextBox Name="StepsTextBox" Margin="20,0,0,0" />
-            <Button Name="CalculateButton" Margin="20,0,0,0" Content="Berechnen" Click="CalculateButton_Click" />
+            <Button Name="CalculateButton" x:Uid="CalculateButton" Margin="20,0,0,0" Content="Calculate" Click="CalculateButton_Click" />
             <ProgressRing Name="ProgressRing"
                         HorizontalAlignment="Center" VerticalAlignment="Center"
                         Width="25" Height="25" Margin="10,0,0,0" />
@@ -62,22 +62,22 @@
                     LabelStyle="{StaticResource LabelStyle}"
                     Title="Punkte" />
                 -->
-            <telerikChart:CategoricalAxis
+            <telerikChart:CategoricalAxis x:Uid="BordersPointsLabel"
                     LabelInterval="10"
                     ShowLabels="False"
                     LabelStyle="{StaticResource LabelStyle}"
-                    Title="Punkte" />
+                    Title="Points" />
             </telerikChart:RadCartesianChart.HorizontalAxis>
             <telerikChart:RadCartesianChart.VerticalAxis>
                 <telerikChart:LinearAxis
-                    LabelStyle="{StaticResource LabelStyle}" Title="Periodizität" />
+                    LabelStyle="{StaticResource LabelStyle}" x:Uid="BordersPeriodicityLabel" Title="Periodicity" />
             </telerikChart:RadCartesianChart.VerticalAxis>
             <telerikChart:LineSeries ItemsSource="{x:Bind periodicityList}">
                 <telerikChart:LineSeries.ValueBinding>
-                    <telerikChart:PropertyNameDataPointBinding PropertyName="Test" />
+                    <telerikChart:PropertyNameDataPointBinding />
                 </telerikChart:LineSeries.ValueBinding>
                 <telerikChart:LineSeries.CategoryBinding>
-                    <telerikChart:PropertyNameDataPointBinding PropertyName="Hello World" />
+                    <telerikChart:PropertyNameDataPointBinding />
                 </telerikChart:LineSeries.CategoryBinding>
             </telerikChart:LineSeries>
         </telerikChart:RadCartesianChart>

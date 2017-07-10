@@ -100,7 +100,7 @@ namespace Mandelbrot
             ResultTable.RowDefinitions.Add(headerRowDefinition);
 
             TextBlock periodicityHeaderTextBlock = new TextBlock();
-            periodicityHeaderTextBlock.Text = "Periodizität";
+            periodicityHeaderTextBlock.Text = (new Windows.ApplicationModel.Resources.ResourceLoader()).GetString("Periodicity");
             periodicityHeaderTextBlock.FontSize = headerFontSize;
             Grid.SetRow(periodicityHeaderTextBlock, 0);
             Grid.SetColumn(periodicityHeaderTextBlock, 0);

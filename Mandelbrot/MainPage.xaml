@@ -18,14 +18,14 @@
                 <TextBox Name="XTextBox" PlaceholderText="x" InputScope="AlphanumericFullWidth" />
                 <TextBox Name="YTextBox" PlaceholderText="y" InputScope="AlphanumericFullWidth" />
                 <StackPanel Orientation="Horizontal">
-                    <Button Name="SendNumberTextBox" Content="Berechnen"
+                    <Button Name="SendNumberTextBox" x:Uid="CalculateButton" Content="Calculate"
                         Click="SendNumberTextBox_Click" />
                     <ProgressRing Name="ProgressRing"
                         HorizontalAlignment="Center" VerticalAlignment="Center"
                         Width="25" Height="25" Margin="10,0,0,0" />
-                    <Button Name="SeeMapButton" Content="Karte"
+                    <Button Name="SeeMapButton" x:Uid="MapButton" Content="Map"
                             Margin="20,0,0,0" Click="SeeMapButton_Click" />
-                    <Button Name="BordersButton" Content="Grenzen"
+                    <Button Name="BordersButton" x:Uid="BordersButton" Content="Borders"
                             Margin="20,0,0,0" Click="BordersButton_Click" />
                 </StackPanel>
                 <TextBlock Name="PeriodizitaetTextBlock" FontSize="23" />

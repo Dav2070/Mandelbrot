@@ -31,10 +31,10 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Genauigkeit" Grid.Column="0" Grid.Row="0" Margin="0,0,10,0" />
-            <TextBlock Text="Faktor" Grid.Column="1" Grid.Row="0" />
-            <TextBlock Text="Iterationen" Grid.Column="2" Grid.Row="0" />
-            <TextBlock Text="Position" Margin="10,0,0,0" Grid.Column="3" Grid.ColumnSpan="1" Grid.Row="0" />
+            <TextBlock Text="Accuracy" x:Uid="MapAccuracy" Grid.Column="0" Grid.Row="0" Margin="0,0,10,0" />
+            <TextBlock Text="Factor" x:Uid="MapFactor" Grid.Column="1" Grid.Row="0" />
+            <TextBlock Text="Iterations" x:Uid="MapIterations" Grid.Column="2" Grid.Row="0" />
+            <TextBlock Text="Position" x:Uid="MapPosition" Margin="10,0,0,0" Grid.Column="3" Grid.ColumnSpan="1" Grid.Row="0" />
 
             <TextBox Name="GenauigkeitTextBox" Grid.Column="0" Grid.Row="1" 
                      Text="{x:Bind genauigkeit}" PlaceholderText="Genauigkeit" InputScope="AlphanumericFullWidth"
@@ -51,20 +51,20 @@
             </StackPanel>
 
             <ComboBox Name="ColorPaletteComboBox" Grid.Column="4" Grid.Row="1">
-                <ComboBoxItem Name="StandardColorComboBoxItem" IsSelected="True" Content="Standard" />
-                <ComboBoxItem Name="RedColorComboBoxItem" Content="Rot" />
-                <ComboBoxItem Name="IndigoColorComboBoxItem" Content="Indigo" />
-                <ComboBoxItem Name="BlueColorComboBoxItem" Content="Blau" />
-                <ComboBoxItem Name="CyanColorComboBoxItem" Content="Cyan" />
-                <ComboBoxItem Name="TealColorComboBoxItem" Content="Aquamarin" />
-                <ComboBoxItem Name="OrangeColorComboBoxItem" Content="Orange" />
-                <ComboBoxItem Name="GreyColorComboBoxItem" Content="Grau" />
-                <ComboBoxItem Name="BlueGreyColorComboBoxItem" Content="Blau-Grau" />
+                <ComboBoxItem Name="StandardColorComboBoxItem" x:Uid="MapColorStandard" IsSelected="True" Content="Standard" />
+                <ComboBoxItem Name="RedColorComboBoxItem" x:Uid="MapColorRed" Content="Red" />
+                <ComboBoxItem Name="IndigoColorComboBoxItem" x:Uid="MapColorIndigo" Content="Indigo" />
+                <ComboBoxItem Name="BlueColorComboBoxItem" x:Uid="MapColorBlue" Content="Blue" />
+                <ComboBoxItem Name="CyanColorComboBoxItem" x:Uid="MapColorCyan" Content="Cyan" />
+                <ComboBoxItem Name="TealColorComboBoxItem" x:Uid="MapColorTeal" Content="Teal" />
+                <ComboBoxItem Name="OrangeColorComboBoxItem" x:Uid="MapColorOrange" Content="Orange" />
+                <ComboBoxItem Name="GreyColorComboBoxItem" x:Uid="MapColorGrey" Content="Grey" />
+                <ComboBoxItem Name="BlueGreyColorComboBoxItem" x:Uid="MapColorBlueGrey" Content="Blue-Grey" />
             </ComboBox>
 
             <StackPanel Name="OptionsStackPanel" Grid.Column="5" Grid.Row="1"
                         Orientation="Horizontal" Margin="10,0,0,0">
-                <Button Name="ZeichnenButton" Content="Zeichnen" Click="ZeichnenButton_Click" />
+                <Button Name="ZeichnenButton" x:Uid="MapDrawButton" Content="Zeichnen" Click="ZeichnenButton_Click" />
                 <TextBlock Name="ProgressTextBlock" 
                        Margin="15,0,0,0" VerticalAlignment="Center" />
                 <!--    <Button Name="CancelButton" Content="Abbrechen" 
